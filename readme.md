@@ -22,7 +22,7 @@ src/
     └── address.rs      # getnewaddress typed handler
 
 
-# 🚀 Setting Up Bitcoin Core with Polar
+## 🚀 Setting Up Bitcoin Core with Polar
 Install Polar: Download and install Polar (cross-platform desktop app for Bitcoin/Lightning local networks).
 
 Create a Network:
