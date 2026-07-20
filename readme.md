@@ -22,7 +22,7 @@ src/
     └── address.rs      # getnewaddress typed handler
 
 
-🚀 Setting Up Bitcoin Core with Polar
+# 🚀 Setting Up Bitcoin Core with Polar
 Install Polar: Download and install Polar (cross-platform desktop app for Bitcoin/Lightning local networks).
 
 Create a Network:
@@ -43,7 +43,7 @@ Go to the Connect tab.
 
 Note the RPC Host, Port, Username, and Password.
 
-⚙️ Configuration
+# ⚙️ Configuration
 Create a .env file in the project root with your credentials:
 
 Code snippet
@@ -52,8 +52,9 @@ BITCOIN_RPC_PORT=18443
 BITCOIN_RPC_USER=polaruser
 BITCOIN_RPC_PASS=polarpass
 BITCOIN_RPC_WALLET=miner
-💻 Usage & Example Terminal Outputs
-1. Blockchain Information
+
+# 💻 Usage & Example Terminal Outputs
+## 1. Blockchain Information
 Bash
 cargo run -- blockchain-info
 Output:
@@ -66,7 +67,7 @@ JSON
   "difficulty": 4.6565423739069247e-10,
   "verificationprogress": 1.0
 }
-2. Wallet Information
+## 2. Wallet Information
 Bash
 cargo run -- wallet-info
 Output:
@@ -78,20 +79,20 @@ JSON
   "unconfirmed_balance": 0.0,
   "txcount": 101
 }
-3. Check Wallet Balance
+## 3. Check Wallet Balance
 Bash
 cargo run -- balance
 Output:
 Plaintext
 Wallet Balance: 50.0 BTC
-4. Generate New Address
+## 4. Generate New Address
 Bash
 cargo run -- new-address
 Output
 Plaintext
 New Address: bcrt1qeygjwh77xyzflumtjsc3xg4hu9vek7r66x75m3
 
-5. Dynamic Generic RPC Calls
+## 5. Dynamic Generic RPC Calls
 Bash
 cargo run -- rpc getblockcount
 Output:
@@ -101,7 +102,7 @@ cargo run -- rpc getblockhash 100
 Output:
 "604d68534c5d84331c601f829bb796656affc83cb1ac3cf095f27f5ae7f86116"
 
-🛡️ Error Handling
+# 🛡️ Error Handling
 The application handles failures gracefully without panics:
 
 Connection Error: Prints clear network/RPC connectivity hints if bitcoind is offline.
@@ -110,6 +111,6 @@ Authentication Error: Friendly output for incorrect RPC credentials.
 
 RPC Faults: Captures and displays specific error codes and messages returned by Bitcoin Core.
 
-Author: Elsuraj Hussaini
+Author: Surajo Hussaini (El-suraj)
 
-Submission Portal: TheBuidl Rust for Bitcoin 2.0
+Submited to: TheBuidl Rust for Bitcoin 2.0
