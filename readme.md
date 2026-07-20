@@ -1,206 +1,115 @@
-# Rust For Bitcoin
+# Rust for Bitcoin Program 2.0 - Technical Assessment
 
-## Take-Home Assessment
-
-### Objective
-
-Build a **command-line application in Rust** that communicates with a local **Bitcoin Core** node running on **Regtest** using **Polar**.
-
-The goal of this assessment is to evaluate your Rust programming skills, understanding of Bitcoin and it's Core JSON-RPC, 
+A modular, production-ready Rust CLI application designed to interface with a local **Bitcoin Core** node running on **Regtest** (managed via **Polar** or standalone `bitcoind`).
 
 ---
 
-# Requirements
+## 🏗️ Architecture & Project Structure
 
-## Part 1 — Setting Up Bitcoin Core
+The project strictly follows modular engineering practices and strong-typing patterns:
 
-Use **Polar** to create and run a local Bitcoin Core node on **Regtest**.
-
-Your application should connect to the node using Bitcoin Core's JSON-RPC interface.
-
-Configuration should be provided through one of the following:
-
-* Environment variables
-* A configuration file
-* Command-line flags
-
-The application should not require editing the source code to change credentials.
-
-Your README should include instructions for:
-
-* Installing Polar
-* Creating a Bitcoin Core node
-* Starting the network
-* Obtaining the RPC URL, username, and password
-* Running your application against the node
-
----
-
-## Part 2 — CLI Commands
-
-Implement the following commands.
-
-### blockchain-info
-
-Display:
-
-* Chain
-* Number of blocks
-* Number of headers
-* Difficulty
-* Verification progress
-
----
-
-### wallet-info
-
-Display:
-
-* Wallet name
-* Balance
-* Unconfirmed balance
-* Number of transactions
-
----
-
-### balance
-
-Print the wallet balance.
-
----
-
-### new-address
-
-Generate and print a new receiving address.
-
----
-
-## Part 3 — Generic RPC Command
-
-Support executing arbitrary Bitcoin Core RPC methods.
-
-Example:
-
-```bash
-cargo run -- rpc getblockcount
-
-cargo run -- rpc getblockhash 200
-
-cargo run -- rpc getblock <hash>
-```
-
-Arguments should be passed dynamically.
-
----
-
-# Technical Requirements
-
-* Use **Rust**.
-* Build a **command-line application** (no graphical interface).
-* Your application should compile successfully using:
-
-```bash
-cargo build
-```
-
-and run using:
-
-```bash
-cargo run
-```
-
-Suggested crates (you may use alternatives):
-
-* clap
-* serde
-* serde_json
-* reqwest
-* anyhow or thiserror
-
-Where appropriate, deserialize Bitcoin Core RPC responses into strongly typed Rust structs instead of relying solely on generic JSON values.
-
----
-
-# Error Handling
-
-Your application should gracefully handle:
-
-* Invalid credentials
-* Connection failures
-* Invalid RPC methods
-* Invalid parameters
-* Missing wallet
-
-Avoid panics and provide clear, user-friendly error messages.
-
----
-
-# Project Structure
-
-A clean and modular project structure is expected.
-
-Example:
-
-```
+```text
 src/
-├── main.rs
-├── cli.rs
-├── rpc.rs
-├── config.rs
-├── error.rs
-└── commands/
-    ├── blockchain.rs
-    ├── wallet.rs
-    └── address.rs
-```
+├── main.rs            # Application entry point & command router
+├── cli.rs             # Command line argument parser (Clap)
+├── config.rs          # Environment & configuration parser
+├── error.rs           # Expressive error types (thiserror)
+├── rpc.rs             # Reusable Bitcoin Core JSON-RPC Client abstraction
+└── commands/          # Strongly-typed command implementations
+    ├── mod.rs
+    ├── blockchain.rs   # getblockchaininfo typed handler
+    ├── wallet.rs       # getwalletinfo & balance typed handlers
+    └── address.rs      # getnewaddress typed handler
 
----
 
-# Documentation
+🚀 Setting Up Bitcoin Core with Polar
+Install Polar: Download and install Polar (cross-platform desktop app for Bitcoin/Lightning local networks).
 
-Include a README that explains:
+Create a Network:
 
-* Project overview
-* Installation
-* Setting up Polar
-* Running the Bitcoin Core node
-* Configuring the application
-* Example commands
-* Any assumptions or design decisions
+Open Polar and click Create a Network.
 
----
+Add 1 Bitcoin Core Node (Regtest).
 
-# Bonus (Optional)
+Click Create Network.
 
-Implement one or more of the following:
+Start Network: Click Start to spin up the containerized Bitcoin Core daemon.
 
-* Pretty terminal output
-* Configuration file support
-* Unit tests
-* Async implementation using Tokio
-* Logging with `tracing`
-* A reusable RPC client abstraction
-* Support for multiple wallets
+Obtain Credentials:
 
----
+Click on the Bitcoin node in Polar.
 
-# Submission
+Go to the Connect tab.
 
-Submit:
+Note the RPC Host, Port, Username, and Password.
 
-* A GitHub repository
-* A README with setup instructions
-* Example terminal output demonstrating each implemented command
+⚙️ Configuration
+Create a .env file in the project root with your credentials:
 
----
+Code snippet
+BITCOIN_RPC_HOST=127.0.0.1
+BITCOIN_RPC_PORT=18443
+BITCOIN_RPC_USER=polaruser
+BITCOIN_RPC_PASS=polarpass
+BITCOIN_RPC_WALLET=miner
+💻 Usage & Example Terminal Outputs
+1. Blockchain Information
+Bash
+cargo run -- blockchain-info
+Output:
 
-# What We Are Looking For
+JSON
+{
+  "chain": "regtest",
+  "blocks": 101,
+  "headers": 101,
+  "difficulty": 4.6565423739069247e-10,
+  "verificationprogress": 1.0
+}
+2. Wallet Information
+Bash
+cargo run -- wallet-info
+Output:
 
-This assessment is designed to evaluate your ability to:
+JSON
+{
+  "walletname": "miner",
+  "balance": 50.0,
+  "unconfirmed_balance": 0.0,
+  "txcount": 101
+}
+3. Check Wallet Balance
+Bash
+cargo run -- balance
+Output:
+Plaintext
+Wallet Balance: 50.0 BTC
+4. Generate New Address
+Bash
+cargo run -- new-address
+Output
+Plaintext
+New Address: bcrt1qeygjwh77xyzflumtjsc3xg4hu9vek7r66x75m3
 
-* Write idiomatic Rust.
-* Organize code into reusable modules.
-* Interact with Bitcoin Core using JSON-RPC.
-* Handle errors gracefully.
-* Write maintainable, well-documented code.
-* Demonstrate a solid understanding of Rust and Bitcoin developer tooling.
+5. Dynamic Generic RPC Calls
+Bash
+cargo run -- rpc getblockcount
+Output:
+101
+Bash
+cargo run -- rpc getblockhash 100
+Output:
+"604d68534c5d84331c601f829bb796656affc83cb1ac3cf095f27f5ae7f86116"
+
+🛡️ Error Handling
+The application handles failures gracefully without panics:
+
+Connection Error: Prints clear network/RPC connectivity hints if bitcoind is offline.
+
+Authentication Error: Friendly output for incorrect RPC credentials.
+
+RPC Faults: Captures and displays specific error codes and messages returned by Bitcoin Core.
+
+Author: Elsuraj Hussaini
+
+Submission Portal: TheBuidl Rust for Bitcoin 2.0
